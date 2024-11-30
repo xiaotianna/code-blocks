@@ -1,0 +1,9 @@
+// 命名空间
+$namespace: 'cb';
+
+@mixin b($block) {
+  $B: $namespace + '-' + $block !global;
+  .#{$B} {
+    @content;
+  }
+}

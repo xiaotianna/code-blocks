@@ -1,0 +1,1 @@
+pnpm -F @code-blocks/playground-vue2 add @code-blocks/ui --workspace

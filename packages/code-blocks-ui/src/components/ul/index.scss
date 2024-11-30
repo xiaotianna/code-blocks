@@ -1,0 +1,25 @@
+@include b('ul') {
+  ul {
+    padding: 16px;
+    box-sizing: border-box;
+    &.no-value {
+      height: 50px;
+      background-color: rgba($color: #000000, $alpha: 0.05);
+      border: 1px dashed rgba($color: #000000, $alpha: 0.2);
+    }
+  }
+  li {
+    display: flex;
+    line-height: 26px;
+    .bullet-dot {
+      color: #1456f0;
+      padding-left: 4px;
+      margin-right: 6px;
+      line-height: 26px;
+    }
+    .li-content {
+      word-wrap: break-word;
+      word-break: break-all;
+    }
+  }
+}

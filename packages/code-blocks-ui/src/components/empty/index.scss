@@ -1,0 +1,18 @@
+@include b('empty') {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+
+  .image {
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    @include res(width, 80, 100);
+  }
+
+  .description {
+    color: #77787b;
+    @include res(font-size, 14, 14);
+    @include res(margin-top, 16, 16);
+  }
+}

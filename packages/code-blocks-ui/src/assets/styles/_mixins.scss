@@ -1,0 +1,46 @@
+// 移动端 媒体查询
+@mixin mb {
+    @media (max-width: 1023.9px) {
+        @content;
+    }
+}
+
+// 移动端 容器查询
+@mixin mb-container {
+    @container (max-width: 1023.9px) {
+        @content;
+    }
+}
+
+// pc端 媒体查询
+@mixin pc {
+    @media (min-width: 1024px) {
+        @content;
+    }
+    // pc端 容器查询
+    @container (min-width: 1024px) {
+        @content;
+    }
+}
+
+// 使用：@include res(font-size, 12, 20);
+@mixin res($property, $mobile: null, $pc: null) {
+    $pcValue: if(unitless($pc), #{$pc}px, $pc);
+    $mobileValue: if(unitless($mobile), vw($mobile), $mobile);
+    $mobileContainerValue: if(unitless($mobile), #{$mobile}px, $mobile);
+
+    @if(exists($pc)) { // exists：sass中判断是否有值
+        @include pc {
+            #{$property}: $pcValue;
+        }
+    }
+
+    @if(exists($mobile)) {
+        @include mb {
+            #{$property}: $mobileValue;
+        }
+        @include mb-container {
+            #{$property}: $mobileContainerValue;
+        }
+    }
+}

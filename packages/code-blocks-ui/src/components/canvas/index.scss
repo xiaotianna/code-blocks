@@ -1,0 +1,8 @@
+@include b('canvas') {
+  .item {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+  }
+}

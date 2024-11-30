@@ -1,0 +1,13 @@
+@include b('text_md') {
+  .text {
+    width: 100%;
+    display: block;
+    padding: 0;
+    word-wrap: break-word;
+    &.no-value {
+      height: 50px;
+      background-color: rgba($color: #000000, $alpha: 0.05);
+      border: 1px dashed rgba($color: #000000, $alpha: 0.2);
+    }
+  }
+}

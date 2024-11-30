@@ -1,0 +1,40 @@
+@include b('image') {
+    .image {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      margin: 0 auto;
+      @include res(height, 295, 295);
+    }
+    .no-image {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      @include res(height, 295, 295);
+    }
+    &.in-canvas {
+      &.platform-user {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      .image {
+        @include res(width, 100, 100);
+        @include res(height, 100, 100);
+      }
+      .no-image {
+        @include res(width, 100, 100);
+        @include res(height, 100, 100);
+      }
+      :deep(.cb-empty .image) {
+        @include res(width, 40, 60);
+      }
+      :deep(.cb-empty .description) {
+        @include res(font-size, 12, 12);
+        @include res(margin-top, 12, 12);
+      }
+    }
+}
+  

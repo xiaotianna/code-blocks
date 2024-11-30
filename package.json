@@ -1,0 +1,64 @@
+{
+  "name": "code-blocks",
+  "version": "1.0.0",
+  "packageManager": "pnpm@7.33.5",
+  "type": "module",
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=7"
+  },
+  "scripts": {
+    "postinstall": "npx only-allow pnpm",
+    "in": "pnpm install -r",
+    "clear": "rimraf --glob ./node_modules ./packages/**/node_modules ./packages/**/dist ./pnpm-lock.yaml",
+    "dev": "pnpm -F @code-blocks/editor dev",
+    "ui:dev": "pnpm -F @code-blocks/ui dev",
+    "ui:build": "pnpm -F @code-blocks/ui build",
+    "ui:test": "pnpm -F @code-blocks/ui test",
+    "ui:coverage": "pnpm -F @code-blocks/ui coverage",
+    "play:vue3": "pnpm -F @code-blocks/ui build && pnpm -F @code-blocks/playground-vue3 dev",
+    "play:vue2": "pnpm -F @code-blocks/ui build && pnpm -F @code-blocks/playground-vue2 serve",
+    "server:dev": "pnpm -F @code-blocks/server start:dev",
+    "prepare": "husky",
+    "lint": "node ./scripts/zx-lint.js"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": "pnpm lint"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-vinyl"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "pnpm": {
+    "packageExtensions": {
+      "vue-template-compiler": {
+        "peerDependencies": {
+          "vue": "^2.7.16"
+        }
+      },
+      "vue-template-compiler@2.7.16": {
+        "peerDependencies": {
+          "vue": "^2.7.16"
+        }
+      },
+      "@vue/test-utils": {
+        "devDependencies": {
+          "vue": "^3.4.21"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.4.1",
+    "@commitlint/config-conventional": "^19.4.1",
+    "cz-vinyl": "^1.6.2",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.10",
+    "rimraf": "^6.0.1",
+    "zx": "^8.1.5"
+  }
+}

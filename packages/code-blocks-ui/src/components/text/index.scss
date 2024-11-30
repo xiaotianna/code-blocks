@@ -1,0 +1,25 @@
+@include b('text') {
+  .text {
+    width: 100%;
+    display: block;
+    padding: 0;
+    &.no-value {
+      height: 50px;
+      background-color: rgba($color: #000000, $alpha: 0.05);
+    }
+  }
+  &.in-canvas {
+    &.platform-user {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .text {
+      @include res(width, 200, 200);
+      @include res(height, 50, 50);
+      &.no-value {
+        @include res(height, 50, 50);
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+@include b('blank') {
+    .blank {
+      width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+    .no-blank {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      @include res(height, 150, 150);
+    }
+  }
+  

@@ -1,0 +1,63 @@
+@include b('code') {
+  .content {
+    width: 100%;
+    line-height: 26px;
+    padding: 10px;
+    box-sizing: border-box;
+    .code-box {
+      width: 100%;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      border-color: #dee0e3;
+      background-color: #f5f6f7;
+      &.no-value {
+        height: 50px;
+      }
+      .language {
+        border-bottom: 1px solid #97979790;
+        padding: 0 10px 10px;
+        box-sizing: border-box;
+        font-weight: 700;
+        font-size: 16px;
+        color: #97979797;
+      }
+      .code {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+
+        pre {
+          display: flex;
+          font-size: 14px;
+          line-height: 22px;
+          .pre-number {
+            display: flex;
+            flex-direction: column;
+            line-height: 22px;
+            padding: 8px 10px;
+            border-right: 1px solid #97979790;
+            color: #97979790;
+            span {
+              height: 22px;
+              text-align: right;
+            }
+          }
+          code {
+            padding: 8px 16px;
+            flex: 1;
+            span {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+  .hljs {
+    background-color: transparent;
+  }
+}

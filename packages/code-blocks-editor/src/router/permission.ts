@@ -67,11 +67,11 @@ const createRouteChecker = () => {
     if (to.fullPath === '/user') {
       if (checkPermission(['admin'])) {
         authRoutes.forEach((item) => router.addRoute(item))
-        if (!isAddedRoutes) {
-          isAddedRoutes = true
-          await router.replace(to.fullPath)
-        }
       }
+    }
+    if (!isAddedRoutes) {
+      isAddedRoutes = true
+      await router.replace(to.fullPath)
     }
   }
 }

@@ -64,10 +64,8 @@ const createRouteChecker = () => {
     myRoutes.forEach((item) => {
       router.addRoute(item)
     })
-    if (to.fullPath === '/user') {
-      if (checkPermission(['admin'])) {
-        authRoutes.forEach((item) => router.addRoute(item))
-      }
+    if (checkPermission(['admin'])) {
+      authRoutes.forEach((item) => router.addRoute(item))
     }
     if (!isAddedRoutes) {
       isAddedRoutes = true

@@ -97,7 +97,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import type { FormInstance } from 'element-plus'
-import { ElMessage } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 import { reqLogin, reqRegister } from '@/api/auth'
 import { md5 } from '@/utils/index'
 import { useRoute, useRouter } from 'vue-router'
@@ -120,8 +120,8 @@ onMounted(() => {
 })
 
 const form = reactive({
-  phone: '15583251761',
-  password: '123'
+  phone: '',
+  password: ''
 })
 
 const ruleFormRef = ref<FormInstance>()
@@ -142,11 +142,17 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       return
     }
     const { type } = route.query
+    const loading = ElLoading.service({
+      lock: true,
+      text: '加载中',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
     if (type === 'login') {
-      login()
+      await login()
     } else if (type === 'register') {
-      register()
-    } else return
+      await register()
+    }
+    loading.close()
   })
 }
 
@@ -175,7 +181,7 @@ const register = async () => {
   const { status } = await reqRegister(params)
   if (status) {
     ElMessage({
-      message: '注册!',
+      message: '注册成功',
       type: 'success'
     })
   }

@@ -1,5 +1,5 @@
 <template>
-  <div ref="mdPreviewRef">
+  <div class="pr-[24px]" ref="mdPreviewRef">
     <MdPreview :modelValue="mdText" id="md-preview" ref="mdPreviewRef" />
   </div>
 </template>

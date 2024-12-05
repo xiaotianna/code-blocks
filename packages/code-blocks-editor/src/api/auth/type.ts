@@ -26,3 +26,27 @@ export interface RegisterResponse extends Response {
     username: string
   }
 }
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user'
+}
+
+export type UserItem = Partial<{
+  id: string
+  phone: string
+  username: string
+  password: string
+  is_status: boolean
+  role: UserRole.ADMIN | UserRole.USER
+}>
+export interface GetUsersResponse extends Response {
+  data: UserItem[]
+  total: number
+}
+
+export interface GetUserRoleResponse extends Response {
+  data: {
+    role: UserRole.ADMIN | UserRole.USER
+  }
+}

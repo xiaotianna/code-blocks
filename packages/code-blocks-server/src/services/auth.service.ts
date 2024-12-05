@@ -47,7 +47,7 @@ export class AuthService {
       where: { phone, is_status: true },
     });
     if (!isStatus) {
-      throw new HttpException('用户已禁用', HttpStatus.BAD_REQUEST);
+      throw new HttpException('账号已禁用', HttpStatus.BAD_REQUEST);
     }
     const user = await this.usersRepository.findOne({
       where: { phone, password },

@@ -14,7 +14,7 @@ import { EditPackage } from '../entities/edit-package.entity';
     TypeOrmModule.forFeature([EditPage, User, EditPackage]),
     MulterModule.register({
       storage: diskStorage({
-        destination: join(__dirname, '../../', '/public/upload'),
+        destination: join(__dirname, '../../', '/public/upload/edit'),
         filename: (req, file, callback) => {
           const fileName = `${new Date().getTime() + extname(file.originalname)}`;
           return callback(null, fileName);

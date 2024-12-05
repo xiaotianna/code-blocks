@@ -1,185 +1,170 @@
 <template>
-  <el-table :data="tableData" class="list">
-    <el-table-column prop="id" label="ID" width="80" />
-    <el-table-column prop="name" label="页面名" width="270" show-overflow-tooltip />
-    <el-table-column prop="updateTime" label="更新时间" width="200" />
-    <el-table-column prop="createTime" label="创建时间" width="200" />
-    <el-table-column fixed="right" label="操作" min-width="260">
+  <el-table :data="tableData" class="list pr-[24px]">
+    <el-table-column type="index" :index="indexMethod" label="序号" width="60" align="center" />
+    <el-table-column prop="id" label="ID" width="320" />
+    <el-table-column prop="name" label="页面名" width="280" show-overflow-tooltip />
+    <el-table-column prop="updateTime" label="更新时间" width="160" />
+    <el-table-column prop="createTime" label="创建时间" width="160" />
+    <el-table-column fixed="right" label="操作" min-width="280">
       <template #default="scope">
-        <el-button size="small" type="primary" @click.prevent="view(scope.$index)">查看</el-button>
+        <el-button size="small" type="primary" @click.prevent="view(scope.$index)">预览</el-button>
         <el-button size="small" @click.prevent="edit(scope.$index)">编辑</el-button>
-        <el-button size="small" @click.prevent="log(scope.$index)">日志</el-button>
-        <el-button size="small" type="danger" @click.prevent="remove(scope.$index)">删除</el-button>
+        <el-button size="small" @click.prevent="lookJSON(scope.row)">JSON</el-button>
+        <el-button size="small" type="danger" @click.prevent="remove(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
   <div class="pagination">
-    <el-button v-show="page !== 1" @click="prev">上一页</el-button>
-    <el-button v-show="!end" @click="next">下一页</el-button>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :default-page-size="size"
+      @change="changePagination"
+    />
   </div>
-
-  <el-dialog v-model="dialogVisible" title="日志" width="900">
-    <el-table :data="logList" class="log-list" @row-click="logRowClick">
-      <el-table-column prop="userId" label="用户ID" width="120" />
-      <el-table-column prop="name" label="页面名" width="240" />
-      <el-table-column prop="content" label="内容" width="300" show-overflow-tooltip />
-      <el-table-column prop="createTime" label="创建时间" width="200" />
-    </el-table>
+  <el-dialog
+    v-model="dialogVisible"
+    :close-on-click-modal="false"
+    align-center
+    :show-close="false"
+    title="JSON Schema"
+    width="600"
+  >
+    <div v-if="dialogVisible" v-jsonlight class="w-full h-[500px] overflow-auto">
+      <pre>{{ formatJSON }}</pre>
+    </div>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false"> 确定 </el-button>
+        <el-button type="primary" @click="closeDialog">确定</el-button>
       </div>
     </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
+import { reqDeletePage, reqGetPagesList } from '@/api/editor'
+import { useUserStore } from '@/stores/user'
+import { formatTime } from '@/utils/formatTime'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ref, type Ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const user = useUserStore()
 
-const page = ref(1)
-const size = ref(20)
-const end = ref(false)
-
-const dialogVisible = ref(false)
-interface LogRow {
-  userId: string
+type TableItem = {
+  id: string
   name: string
   content: string
+  updateTime: string
   createTime: string
 }
-const logList = ref<LogRow[]>([])
+const tableData = ref<TableItem[]>([])
 
-const tableData = ref<
-  {
-    id: number
-    name: string
-    content: string
-    updateTime: string
-    createTime: string
-  }[]
->([
-  {
-    id: 1,
-    name: 'test',
-    content: 'test',
-    updateTime: '2023-05-05 12:00:00',
-    createTime: '2023-05-05 12:00:00'
-  },
-  {
-    id: 2,
-    name: 'test',
-    content: 'test',
-    updateTime: '2023-05-05 12:00:00',
-    createTime: '2023-05-05 12:00:00'
-  }
-])
+let page = ref(1)
+let size = ref(15)
+let end = ref(false)
+let total = ref(0)
+
+type ResDataItem =
+  | {
+      id: number
+      name: string
+      content: string
+      update_time: string
+      create_time: string
+    }
+  | any
 
 const getData = async () => {
-  // const params = {
-  //   page: page.value,
-  //   size: size.value
-  // }
-  // // const { status, data } = await getPageListAsync(params)
-  // if (!status) return
-  // if (data) {
-  //   tableData.value = data?.map(
-  //     (item: {
-  //       page_id: number
-  //       name: string
-  //       content: string
-  //       update_time: string
-  //       create_time: string
-  //     }) => {
-  //       return {
-  //         id: item.page_id,
-  //         name: item.name,
-  //         content: item.content,
-  //         updateTime: item.update_time,
-  //         createTime: item.create_time
-  //       }
-  //     }
-  //   )
-  //   end.value = data?.length < size.value
-  // }
+  const params = {
+    page: page.value,
+    size: size.value,
+    user_id: user.userInfo.id
+  }
+  const res = await reqGetPagesList(params)
+  const { status, data, total: resTotal } = res
+  if (!status) return
+  if (data) {
+    total.value = resTotal
+    tableData.value = [
+      ...(data?.map((item: ResDataItem) => ({
+        id: item.id,
+        name: item.name,
+        content: item.content,
+        updateTime: formatTime(item.update_time),
+        createTime: formatTime(item.create_time)
+      })) as ResDataItem[])
+    ]
+    end.value = data?.length < size.value
+  }
 }
 
-getData()
+onMounted(() => {
+  getData()
+})
 
-const prev = () => {
-  page.value--
+const changePagination = (currentPage: number) => {
+  page.value = currentPage
   getData()
 }
-const next = () => {
-  page.value++
-  getData()
-}
+
+const indexMethod = (index: number) => size.value * (page.value - 1) + index + 1
+
 const view = (index: number) => {
   const { id } = tableData.value[index] || {}
-  window.open('http://localhost:5173/#/?id=' + id, '_blank')
+  window.open('/preview?id=' + id, '_blank')
 }
 const edit = (index: number) => {
   const { id } = tableData.value[index] || {}
   router.push(`/edit?id=${id}`)
 }
-const log = async (index: number) => {
-  //   dialogVisible.value = true
-  //   const { id } = tableData.value[index] || {}
-  //   const params = {
-  //     url: '/rest/v1/page/update',
-  //     url_unique: String(id)
-  //   }
-  //   // const { status, data } = await getLogListAsync(params)
-  //   if (!status) return
-  //   if (data) {
-  //     logList.value = data.map(
-  //       (item: {
-  //         user_id: string
-  //         create_time: string
-  //         body: {
-  //           content: string
-  //           name: string
-  //         }
-  //       }) => {
-  //         return {
-  //           userId: item.user_id,
-  //           createTime: item.create_time,
-  //           name: item.body.name,
-  //           content: item.body.content
-  //         }
-  //       }
-  //     )
-  //   }
+
+let dialogVisible = ref(false)
+let lookJSONData = ref<ResDataItem>({})
+const lookJSON = async (info: TableItem) => {
+  lookJSONData.value = info
+  dialogVisible.value = true
 }
-const remove = (index: number) => {
-  //   const { name, id } = tableData.value[index] || {}
-  //   ElMessageBox.confirm(`你确定要删除 "${name}" 吗？`, '警告', {
-  //     confirmButtonText: '确定',
-  //     cancelButtonText: '取消',
-  //     type: 'warning'
-  //   }).then(async () => {
-  //     const { status, data } = await deletePageAsync(id)
-  //     if (!status) return
-  //     if (data) {
-  //       tableData.value.splice(index, 1)
-  //       ElMessage({
-  //         type: 'success',
-  //         message: '删除成功！'
-  //       })
-  //     }
-  //   })
+
+const formatJSON = computed(() => {
+  try {
+    return JSON.stringify(lookJSONData.value?.content, null, 2)
+  } catch (error) {
+    return lookJSONData.value
+  }
+})
+
+const closeDialog = () => {
+  lookJSONData.value = {}
+  dialogVisible.value = false
 }
-const { copy } = useClipboard()
-const logRowClick = async (row: LogRow) => {
-  await copy(row.content || '')
-  ElMessage({
-    type: 'success',
-    message: '复制成功！'
+
+const remove = (info: TableItem) => {
+  const { id, name } = info
+  ElMessageBox.confirm(`你确定要删除 "${name}" 吗？`, '警告', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
   })
+    .then(async () => {
+      const params = { id }
+      const { status } = await reqDeletePage(params)
+      if (!status) {
+        return ElMessage({
+          type: 'error',
+          message: '删除失败！'
+        })
+      } else {
+        getData()
+        ElMessage({
+          type: 'success',
+          message: '删除成功！'
+        })
+      }
+    })
+    .catch(() => {})
 }
 </script>
 
@@ -192,11 +177,14 @@ const logRowClick = async (row: LogRow) => {
 .pagination {
   padding-top: 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 .log-list {
   width: 100%;
   height: 400px;
   overflow: auto;
+}
+:deep(.el-table__cell:nth-of-type(1) .cell) {
+  white-space: nowrap;
 }
 </style>

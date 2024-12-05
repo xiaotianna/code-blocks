@@ -19,3 +19,15 @@ export class PackageUpdateSaveDto extends PackageSaveDto {
   @IsString({ message: 'Id must be a string' })
   id: string;
 }
+
+export class PackageListDto {
+  @IsNotEmpty({ message: 'User id is required' })
+  @IsUUID('4', { message: 'User id must be a valid UUID' })
+  user_id: string;
+
+  @IsNotEmpty({ message: 'Page is required' })
+  page: number;
+
+  @IsNotEmpty({ message: 'Size is required' })
+  size: number;
+}

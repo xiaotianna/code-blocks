@@ -9,7 +9,7 @@
     :viewport="viewport"
   >
     <template #default="{ item }">
-      <mo-container-child
+      <cb-container-child
         :block="item"
         :viewport="viewport"
       />

@@ -32,7 +32,6 @@ import HomeSider from '@/components/home/home-sider.vue'
 }
 
 .container {
-  padding-right: 24px;
   height: calc(100vh - var(--layout-home-header-height));
   overflow: auto;
 }

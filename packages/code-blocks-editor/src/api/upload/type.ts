@@ -5,3 +5,5 @@ export interface EditUploadResponse extends Response {
     url: string
   }
 }
+
+export type UserUploadResponse = EditUploadResponse

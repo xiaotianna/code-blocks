@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Post,
@@ -14,15 +15,24 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { File } from 'node:buffer';
 import { FileTypeDecorator } from '../decorators/file-type.decorator';
 import { EditService } from '../services/edit.service';
-import { PageReleaseDto, PageUpdateDto } from '../dto/editor/page.dto';
+import {
+  CopyDto,
+  DeleteDto,
+  PageListDto,
+  PageReleaseDto,
+  PageSearchDto,
+  PageUpdateDto,
+  PreviewDto,
+} from '../dto/editor/page.dto';
 import { TypeOrmDecorator } from '../decorators/typeorm.decorator';
 import {
   PackageSaveDto,
   PackageUpdateSaveDto,
 } from '../dto/editor/package.dto';
-import { PackageListDto } from '../dto/editor/package-list.dto';
+import { PackageListDto } from '../dto/editor/package.dto';
 import { PackageListParamsPipe } from '../pipes/package-list.pipe';
 import { JwtGuard } from '../guards/jwt.guard';
+import { PageSearchParamsPipe } from '../pipes/page-search.pipe';
 
 export interface FileObject extends File {
   fieldname: string;
@@ -138,15 +148,149 @@ export class EditController {
   }
 
   /**
-   * 获取套件列表
+   * 获取套件列表接口
+   * @param params user_id 用户id
+   * @param page 页码
+   * @param size 每页数量
+   * @returns
    */
   @Get('/package/list')
   async packageList(@Query(new PackageListParamsPipe()) dto: PackageListDto) {
-    const res = await this.editService.packageList(dto);
+    const { result, total } = await this.editService.packageList(dto);
+    return {
+      code: 200,
+      message: '获取成功',
+      data: result,
+      total,
+    };
+  }
+
+  /**
+   * 获取页面列表接口
+   * @param params user_id 用户id
+   * @param page 页码
+   * @param size 每页数量
+   * @returns
+   */
+  @Get('/page/list')
+  async pageList(@Query(new PackageListParamsPipe()) dto: PageListDto) {
+    const { result, total } = await this.editService.pageList(dto);
+    return {
+      code: 200,
+      message: '获取成功',
+      data: result,
+      total,
+    };
+  }
+
+  /**
+   * 预览页面接口
+   * @param id 页面id
+   * @param user_id 用户id
+   * @returns
+   */
+  @Get('/page/preview')
+  async pagePreview(@Query() dto: PreviewDto) {
+    const res = await this.editService.pagePreview(dto);
     return {
       code: 200,
       message: '获取成功',
       data: res,
     };
+  }
+
+  /**
+   * 预览套件接口
+   * @param id 套件id
+   * @param user_id 用户id
+   * @returns
+   */
+  @Get('/package/preview')
+  async packagePreview(@Query() dto: PreviewDto) {
+    const res = await this.editService.packagePreview(dto);
+    return {
+      code: 200,
+      message: '获取成功',
+      data: res,
+    };
+  }
+
+  /**
+   * 删除页面接口
+   * @param id 页面id
+   * @returns
+   */
+  @Delete('/page/delete')
+  async pageDelete(@Body() dto: DeleteDto) {
+    const res = await this.editService.pageDelete(dto);
+    if (res.affected === 0) {
+      throw new HttpException('删除失败', 400);
+    } else if (res.affected > 0) {
+      return {
+        code: 200,
+        message: '删除成功',
+        data: null,
+      };
+    }
+  }
+
+  /**
+   * 删除套件接口
+   * @param id 页面id
+   * @returns
+   */
+  @Delete('/package/delete')
+  async packageDelete(@Body() dto: DeleteDto) {
+    const res = await this.editService.packageDelete(dto);
+    if (res.affected === 0) {
+      throw new HttpException('删除失败', 400);
+    } else if (res.affected > 0) {
+      return {
+        code: 200,
+        message: '删除成功',
+        data: null,
+      };
+    }
+  }
+
+  /**
+   * 获取所有页面接口
+   * @param keyword 搜索关键字(作者、作品名称)
+   * @param page 页码
+   * @param size 每页数量
+   * @returns
+   */
+  @Get('/search')
+  async pageSearch(
+    @Query(new PageSearchParamsPipe()) dto: PageSearchDto,
+    @Query('keyword') keyword?: string,
+  ) {
+    const { result, total } = await this.editService.pageSearch(dto, keyword);
+    return {
+      code: 200,
+      message: '获取成功',
+      data: result,
+      total,
+    };
+  }
+
+  /**
+   * 复制页面接口
+   * @param id 页面id
+   * @param user_id 用户id
+   * @returns
+   */
+  @Post('/copy')
+  async pageCopy(@Body() dto: CopyDto) {
+    const res = await this.editService.pageCopy(dto);
+    if (res) {
+      return {
+        code: 200,
+        message: '复制成功',
+        data: null,
+      };
+    } else {
+      throw new HttpException('复制失败', 400);
+    }
   }
 }

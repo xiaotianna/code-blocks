@@ -22,13 +22,19 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
   (response) => {
-    console.log(response.data)
-
     if (response.data?.code === 401) {
       const user = useUserStore()
       user.clearInfo()
       router.replace('/login')
       ElMessage.error('登录已过期，请重新登录')
+      return
+    }
+
+    if (response.data?.code === 403) {
+      const user = useUserStore()
+      user.clearInfo()
+      router.replace('/login')
+      ElMessage.error('无权限')
       return
     }
 

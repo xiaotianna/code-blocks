@@ -66,8 +66,6 @@ export class User {
 
   @BeforeInsert()
   setDefaultUsername() {
-    const currentDate = new Date();
-    const datePart = currentDate.toISOString().slice(0, 10).replace(/-/g, '');
-    this.username = `${this.phone}_${datePart}`;
+    this.username = this.phone;
   }
 }

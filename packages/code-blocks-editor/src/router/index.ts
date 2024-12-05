@@ -9,28 +9,7 @@ const router = createRouter({
       component: () => import('@/pages/home.vue'),
       meta: {
         title: '项目介绍',
-        layout: 'home',
-        isLogin: false
-      }
-    },
-    {
-      path: '/page',
-      name: 'page',
-      component: () => import('@/pages/page.vue'),
-      meta: {
-        title: '页面管理',
-        layout: 'home',
-        isLogin: true
-      }
-    },
-    {
-      path: '/package',
-      name: 'package',
-      component: () => import('@/pages/package.vue'),
-      meta: {
-        title: '套件管理',
-        layout: 'home',
-        isLogin: true
+        layout: 'home'
       }
     },
     {
@@ -43,16 +22,36 @@ const router = createRouter({
         isLogin: true
       }
     },
-    {
-      path: '/user',
-      name: 'user',
-      component: () => import('@/pages/user.vue'),
-      meta: {
-        title: '用户管理',
-        layout: 'home',
-        isLogin: true
-      }
-    },
+    // {
+    //   path: '/page',
+    //   name: 'page',
+    //   component: () => import('@/pages/page.vue'),
+    //   meta: {
+    //     title: '我的页面',
+    //     layout: 'home',
+    //     isLogin: true
+    //   }
+    // },
+    // {
+    //   path: '/package',
+    //   name: 'package',
+    //   component: () => import('@/pages/package.vue'),
+    //   meta: {
+    //     title: '我的套件',
+    //     layout: 'home',
+    //     isLogin: true
+    //   }
+    // },
+    // {
+    //   path: '/user',
+    //   name: 'user',
+    //   component: () => import('@/pages/user.vue'),
+    //   meta: {
+    //     title: '用户管理',
+    //     layout: 'home',
+    //     isLogin: true
+    //   }
+    // },
     {
       path: '/edit',
       name: 'edit',

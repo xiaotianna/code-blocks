@@ -170,7 +170,7 @@ const preview = () => {
 }
 
 const back = () => {
-  router.push('/')
+  router.go(-1)
 }
 
 const submitPackage = () => {

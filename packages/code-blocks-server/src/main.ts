@@ -29,7 +29,8 @@ async function bootstrap() {
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   // 配置静态资源目录
   app.useStaticAssets(join(__dirname, '..', '/public/images'));
-  app.useStaticAssets(join(__dirname, '..', '/public/upload'));
+  app.useStaticAssets(join(__dirname, '..', '/public/upload/edit'));
+  app.useStaticAssets(join(__dirname, '..', '/public/upload/user'));
 
   // 跨域
   app.use(cors());

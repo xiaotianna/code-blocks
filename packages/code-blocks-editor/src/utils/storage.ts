@@ -26,3 +26,7 @@ export function getUserInfo() {
   if (!info) return info
   return JSON.parse(localStorage.getItem(constants.USER_INFO) as string)
 }
+
+export function removeUserInfo() {
+  localStorage.removeItem(constants.USER_INFO)
+}

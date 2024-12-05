@@ -7,12 +7,15 @@ import { TypeOrmConfigModule } from './config/typeorm.module';
 import { LogConfigModule } from './config/log.module';
 import { ENV_Config_Module } from './config/config.module';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
 @Global()
 @Module({
   imports: [
     ENV_Config_Module,
     TypeOrmConfigModule,
+    TypeOrmModule.forFeature([User]),
     LogConfigModule,
     AuthModule,
     EditModule,

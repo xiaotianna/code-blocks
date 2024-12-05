@@ -19,6 +19,7 @@
     "play:vue3": "pnpm -F @code-blocks/ui build && pnpm -F @code-blocks/playground-vue3 dev",
     "play:vue2": "pnpm -F @code-blocks/ui build && pnpm -F @code-blocks/playground-vue2 serve",
     "server:dev": "pnpm -F @code-blocks/server start:dev",
+    "server:build": "pnpm -F @code-blocks/server build",
     "prepare": "husky",
     "lint": "node ./scripts/zx-lint.js"
   },

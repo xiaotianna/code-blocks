@@ -20,13 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import VIcon from '@/components/base/v-icon.vue'
 import icon from '@/config/icon'
+import { RolesCodeEnum, useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const route = useRoute()
+const user = useUserStore()
 
 const createInfo = ref({
   name: '创建设计',
@@ -45,26 +47,41 @@ const list = ref([
     icon: icon.workSquare,
     ativeIcon: icon.workSquareActive,
     link: '/works-square'
-  },
+  }
+])
+
+const myList = [
   {
-    name: '页面管理',
+    name: '我的页面',
     icon: icon.home,
     ativeIcon: icon.homeActive,
     link: '/page'
   },
   {
-    name: '套件管理',
+    name: '我的套件',
     icon: icon.package,
     ativeIcon: icon.packageActive,
     link: '/package'
-  },
+  }
+]
+
+const authList = [
   {
     name: '用户管理',
     icon: icon.user,
     ativeIcon: icon.userActive,
     link: '/user'
   }
-])
+]
+
+onMounted(() => {
+  if (user.token) {
+    list.value = [...list.value, ...myList]
+  }
+  if (user.role === RolesCodeEnum.ADMIN) {
+    list.value = [...list.value, ...authList]
+  }
+})
 
 const create = () => {
   router.push('/edit')

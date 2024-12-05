@@ -19,6 +19,12 @@ import { getUserInfo } from '@/utils/storage'
 import { useUserStore } from '@/stores/user'
 // 引入路由守卫
 import '@/router/permission'
+// directive
+import { jsonlight } from '@/directives/highlight'
+import { permission } from '@/directives/permission'
+
+// ts
+import { UserRole } from '@/api/auth/type'
 
 const app = createApp(App)
 
@@ -26,6 +32,7 @@ const u_info = getUserInfo()
 if (u_info) {
   const user = useUserStore(pinia)
   user.setInfo(u_info)
+  user.setRole(u_info.role === UserRole.USER ? 10 : 20)
 }
 
 app.config.globalProperties.$baseUrl = baseUrl
@@ -39,5 +46,7 @@ app.use(pinia)
 // 使用use，需要自己上绑定install方法，需要去@code-blocks/ui添加
 // app.use可以传递第二个参数，提供给ui组件库，platform用来判断是编辑器还是用户端
 app.use<{ platform: 'editor' | 'user' }>(CodeBlockUI, { platform: 'editor' })
+app.use(jsonlight)
+app.use(permission)
 
 app.mount('#app')

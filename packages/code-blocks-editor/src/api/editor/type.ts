@@ -23,6 +23,7 @@ export interface PageReleaseResponse extends Response {
     name: string
     content: ReleaseParamContent
   }
+  total: number
 }
 
 export type PackageSaveParam = PageReleaseParam
@@ -39,4 +40,29 @@ export interface PackageReleaseResponse extends Response {
 
 export interface PackageListResponse extends Response {
   data: PageUpdateParam[]
+  total: number
 }
+
+export type PageListResponse = PackageListResponse
+
+export type GetPageByIdResponse = PackageReleaseResponse
+
+export interface DeletePageResponse extends Response {
+  data: null
+}
+
+export type SearchPageItem = {
+  id: string
+  name: string
+  content: ReleaseParamContent
+  user: {
+    id: string
+    username: string
+  }
+}
+export interface GetSearchPageResponse extends Response {
+  data: SearchPageItem[]
+  total: number
+}
+
+export type CopyPageResponse = DeletePageResponse

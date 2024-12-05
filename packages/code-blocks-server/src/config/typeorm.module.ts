@@ -11,7 +11,6 @@ import {
   DB_PORT,
   DB_TYPE,
   DB_USERNAME,
-  TYPEORM_synchronize,
 } from '../common/constant/env';
 // typeorm 实体
 import { User } from '../entities/user.entity';
@@ -32,8 +31,8 @@ import { EditPackage } from '../entities/edit-package.entity';
           password: configService.get(DB_PASSWORD),
           database: configService.get(DB_DATABASE),
           entities: [User, EditPage, EditPackage],
-          synchronize: configService.get(TYPEORM_synchronize), // 初始化时要为true，不然会创建不了表
-          // synchronize: false, // 初始化时要为true，不然会创建不了表
+          // synchronize: configService.get(TYPEORM_synchronize), // 初始化时要为true，不然会创建不了表
+          synchronize: false, // 初始化时要为true，不然会创建不了表
           logging: ['log'],
         }) as TypeOrmModuleOptions,
     }),

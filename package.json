@@ -12,6 +12,7 @@
     "in": "pnpm install -r",
     "clear": "rimraf --glob ./node_modules ./packages/**/node_modules ./packages/**/dist ./pnpm-lock.yaml",
     "dev": "pnpm -F @code-blocks/editor dev",
+    "build": "pnpm ui:build && pnpm -F @code-blocks/editor build-only",
     "ui:dev": "pnpm -F @code-blocks/ui dev",
     "ui:build": "pnpm -F @code-blocks/ui build",
     "ui:test": "pnpm -F @code-blocks/ui test",

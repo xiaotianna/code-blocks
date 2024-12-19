@@ -23,7 +23,7 @@
           </div>
 
           <!-- Right side: Login Form -->
-          <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md m-auto">
+          <div class="bg-white p-8 rounded-xl shadow-md w-full lg:max-w-md m-auto">
             <h2 class="text-2xl font-bold text-gray-900 mb-6" v-if="route.query?.type === 'login'">
               登录
             </h2>

@@ -27,7 +27,7 @@
   },
   "scripts": {
     "dev": "pnpm clear:dist && pnpm switch:vue3 && vite build --watch",
-    "build": "pnpm clear:dist && pnpm build:vue3 && pnpm build:vue2",
+    "build": "pnpm clear:dist && pnpm build:vue2 && pnpm build:vue3",
     "build:vue3": "pnpm switch:vue3 && vite build",
     "build:vue2": "pnpm switch:vue2 && vite build",
     "switch:vue3": "vue-demi-switch 3 vue3",
@@ -40,13 +40,15 @@
   "dependencies": {
     "@sinclair/typebox": "^0.33.9",
     "@vue/composition-api": "^1.7.2",
-    "@vueup/vue-quill": "^1.2.0",
-    "highlight.js": "^11.10.0",
-    "swiper": "^11.1.14",
     "vue-demi": "^0.14.10",
     "vue2": "npm:vue@~2.6.14",
     "vue2.7": "npm:vue@~2.7.16",
     "vue3": "npm:vue@~3"
+  },
+  "peerDependencies": {
+    "@vueup/vue-quill": "^1.2.0",
+    "highlight.js": "^11.10.0",
+    "swiper": "^11.1.14"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",

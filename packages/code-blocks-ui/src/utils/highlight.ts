@@ -1,6 +1,6 @@
 import { App, DirectiveBinding } from 'vue-demi'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/a11y-light.min.css'
+// import 'highlight.js/styles/a11y-light.min.css'
 
 const handleHighlightCode = (
   el: HTMLElement,

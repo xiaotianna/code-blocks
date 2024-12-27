@@ -32,12 +32,23 @@ export default defineConfig({
       fileName: 'code-blocks-ui'
     },
     rollupOptions: {
-      external: ['vue', 'vue-demi'], // 排除宿主依赖
+      external: [
+        'vue',
+        'vue-demi',
+        'highlight.js',
+        'swiper',
+        'swiper/vue',
+        'swiper/element/bundle'
+      ], // 排除宿主依赖
       output: {
         globals: {
           // 别名，在umd模式下，将自动添加到全局变量中
           vue: 'Vue',
-          'vue-demi': 'VueDemi'
+          'vue-demi': 'VueDemi',
+          'highlight.js': 'hljs',
+          swiper: 'Swiper',
+          'swiper/vue': 'SwiperVue',
+          'swiper/element/bundle': 'SwiperElement'
         }
       }
     }

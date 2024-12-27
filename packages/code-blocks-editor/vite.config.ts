@@ -31,7 +31,15 @@ export default defineConfig({
           var: 'hljs',
           path: 'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.10.0/highlight.min.js'
         }
-      ]
+      ],
+      generateScriptTag(name, url) {
+        return {
+          attrs: {
+            src: url,
+            async: true
+          }
+        }
+      }
     })
   ],
   build: {
